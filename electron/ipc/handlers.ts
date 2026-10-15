@@ -1,14 +1,13 @@
-import { BrowserWindow } from "electron";
 import { registerAnnouncementHandlers } from "./register/announcements";
 import { registerAssetHandlers } from "./register/assets";
 import { registerCaptionHandlers } from "./register/captions";
 import { registerCloudShareHandlers } from "./register/cloudShare";
 import { registerExportHandlers } from "./register/export";
-import { registerPermissionHandlers } from "./register/permissions";
+import { registerExternalLinkHandlers } from "./register/externalLinks";
 import { registerProjectHandlers } from "./register/project";
-import { registerRecordingHandlers } from "./register/recording";
+import { registerMediaSidecarHandlers } from "./register/mediaSidecars";
 import { registerSettingsHandlers } from "./register/settings";
-import { registerSourceHandlers } from "./register/sources";
+import { registerWindowNavigationHandlers } from "./register/windowNavigation";
 import {
 	selectedSource,
 	setNativeScreenRecordingActive,
@@ -54,18 +53,10 @@ export function killWindowsCaptureProcess() {
 
 export function registerIpcHandlers(
 	createEditorWindow: () => void,
-	createSourceSelectorWindow: () => BrowserWindow,
-	_getMainWindow: () => BrowserWindow | null,
-	getSourceSelectorWindow: () => BrowserWindow | null,
-	onRecordingStateChange?: (recording: boolean, sourceName: string) => void,
 ) {
-	registerSourceHandlers({
-		createEditorWindow,
-		createSourceSelectorWindow,
-		getSourceSelectorWindow,
-	});
-	registerRecordingHandlers(onRecordingStateChange);
-	registerPermissionHandlers();
+	registerWindowNavigationHandlers(createEditorWindow);
+	registerMediaSidecarHandlers();
+	registerExternalLinkHandlers();
 	registerAnnouncementHandlers();
 	registerAssetHandlers();
 	registerExportHandlers();

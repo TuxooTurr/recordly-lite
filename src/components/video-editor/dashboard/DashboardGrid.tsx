@@ -1,4 +1,3 @@
-import { RecordNewButton } from "./RecordNewButton";
 import { RawPreview } from "./RawRecordings";
 import { Cloud, ImageSquare } from "@/components/ui/icons";
 
@@ -136,9 +135,6 @@ export function DashboardGrid({
 									? "No matching projects"
 									: "It's looking empty in here..."}
 						</p>
-						{!isRaw && !hasActiveFilters && (
-							<RecordNewButton busy={busy} run={run} first className="mt-2" />
-						)}
 						{isRaw && rawError && (
 							<Button onClick={() => void refreshRaw()}>Retry</Button>
 						)}

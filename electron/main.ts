@@ -45,13 +45,11 @@ import {
 } from "./updater";
 import {
 	createEditorWindow,
-	createSourceSelectorWindow,
 	getHudOverlayWindow,
 	getUpdateToastWindow,
 	hideUpdateToastWindow,
 	isHudOverlayMousePassthroughSupported,
 	reassertHudOverlayMousePassthrough as reassertHudOverlayMouseState,
-	setHudOverlayRecordingActive,
 	showUpdateToastWindow,
 } from "./windows";
 
@@ -143,7 +141,6 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
 
 // Window references
 let mainWindow: BrowserWindow | null = null;
-let sourceSelectorWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
 let trayContextMenu: Menu | null = null;
 let selectedSourceName = "";
@@ -813,14 +810,6 @@ function createEditorWindowWrapper() {
 	return editorWindow;
 }
 
-function createSourceSelectorWindowWrapper() {
-	sourceSelectorWindow = createSourceSelectorWindow();
-	sourceSelectorWindow.on("closed", () => {
-		sourceSelectorWindow = null;
-	});
-	return sourceSelectorWindow;
-}
-
 // On macOS, applications and their menu bar stay active until the user quits
 // explicitly with Cmd + Q.
 app.on("before-quit", () => {
@@ -941,26 +930,7 @@ app.whenReady().then(async () => {
 		}),
 	]);
 
-	registerIpcHandlers(
-		createEditorWindowWrapper,
-		createSourceSelectorWindowWrapper,
-		() => mainWindow,
-		() => sourceSelectorWindow,
-		(recording: boolean, sourceName: string) => {
-			selectedSourceName = sourceName;
-			setHudOverlayRecordingActive(recording);
-			if (shouldUseTray()) {
-				if (!tray) createTray();
-				updateTrayMenu(recording);
-			}
-			if (recording) {
-				reassertHudOverlayMouseState();
-			}
-			if (!recording) {
-				restoreWindowSafely(mainWindow);
-			}
-		},
-	);
+	registerIpcHandlers(createEditorWindowWrapper);
 
 	if (IS_SMOKE_EXPORT || process.env.RECORDLY_DEV_OPEN_RECORDING_INPUT) {
 		await logSmokeExportGpuDiagnostics();

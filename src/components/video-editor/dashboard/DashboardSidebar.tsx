@@ -1,5 +1,4 @@
 import { FeedbackDialog } from "@/components/feedback/FeedbackDialog";
-import { RecordNewButton } from "./RecordNewButton";
 import { SidebarCards } from "./SidebarCards";
 import { FolderRow } from "./FolderRow";
 import { Cloud, File, GearSix, House, Plus, UserCircle } from "@/components/ui/icons";
@@ -12,8 +11,6 @@ import type { DashboardModel } from "./useDashboardModel";
 import { FOLDER_COLORS } from "./useProjectFolders";
 
 export function DashboardSidebar({
-	busy,
-	run,
 	folders,
 	save,
 	section,
@@ -25,8 +22,6 @@ export function DashboardSidebar({
 	accountLabel,
 }: Pick<
 	DashboardProps & DashboardModel,
-	| "busy"
-	| "run"
 	| "folders"
 	| "save"
 	| "section"
@@ -51,7 +46,6 @@ export function DashboardSidebar({
 					/>
 					<span className="text-[15px] font-semibold tracking-tight">Recordly</span>
 				</div>
-				<RecordNewButton busy={busy} run={run} className="mb-5 w-full" />
 				<nav className="space-y-1">
 					<Button
 						variant="ghost"
